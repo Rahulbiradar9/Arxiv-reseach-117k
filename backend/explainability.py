@@ -24,7 +24,7 @@ class ExplainableBertPredictor:
             num_labels=4,
             problem_type="multi_label_classification",
             output_attentions=True,
-            torch_dtype=torch.float16
+            dtype=torch.float16
         )
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -191,15 +191,15 @@ class ExplainableBertPredictor:
         return explanations
 
 if __name__ == "__main__":
+    import os
     print("Instantiating Explainable BERT...")
-    explainer = ExplainableBertPredictor("distilbert-base-uncased")
+    model_path = os.path.join(os.path.dirname(__file__), "..", "bert-multi-label-model", "final")
+    explainer = ExplainableBertPredictor(model_path)
     
     sample_text = "The neural network was trained on routing protocols to prevent encryption attacks on the distributed system."
     print(f"\nEvaluating Context: '{sample_text}'")
     
-    # We use a threshold of 0.1 to artificially guarantee a prediction registers
-    # (Since this tests against the untrained `bert-base-uncased` variant for demonstration execution)
-    result = explainer.explain_all(sample_text, threshold=0.1)
+    result = explainer.explain_all(sample_text, threshold=0.4)
     
     print("\n[Generated Explainability Payload]")
     print(json.dumps(result, indent=2))

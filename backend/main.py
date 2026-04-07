@@ -29,7 +29,9 @@ async def startup_event():
     global predictor
     logger.info("Initializing ExplainableBertPredictor...")
     try:
-        predictor = ExplainableBertPredictor("distilbert-base-uncased")
+        # Load the fine-tuned model from the local checkpoint
+        model_path = os.path.join(os.path.dirname(__file__), "..", "bert-multi-label-model", "final")
+        predictor = ExplainableBertPredictor(model_path)
         logger.info("Predictor Initialized Successfully.")
     except Exception as e:
         logger.error(f"Failed to load the model: {e}")
@@ -73,7 +75,7 @@ def explain_endpoint(req: TextRequest):
     try:
         # Utilizing the built-in Explain_All handler from the predictor 
         # Using threshold 0.1 for the untuned base-bert model to guarantee returning visualizations
-        explanations = predictor.explain_all(req.text, threshold=0.1)
+        explanations = predictor.explain_all(req.text, threshold=0.4)
         return {"explanations": explanations}
     except Exception as e:
         logger.error(f"Explainability error: {e}")
