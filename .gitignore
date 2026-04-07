@@ -61,4 +61,3 @@ bert-multi-label-model/
 runs/
 checkpoint-*/
 tb_logs/
-screenshots/

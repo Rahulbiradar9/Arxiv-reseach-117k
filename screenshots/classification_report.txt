@@ -1,0 +1,11 @@
+              precision    recall  f1-score   support
+
+          AI     0.9996    0.9931    0.9963      4778
+    Networks     1.0000    0.9888    0.9944      3398
+    Security     1.0000    0.9739    0.9868       460
+     Systems     1.0000    0.9812    0.9905      1703
+
+   micro avg     0.9998    0.9889    0.9943     10339
+   macro avg     0.9999    0.9843    0.9920     10339
+weighted avg     0.9998    0.9889    0.9943     10339
+ samples avg     0.5652    0.5632    0.5639     10339
