@@ -7,26 +7,10 @@ const api = axios.create({
   baseURL: 'http://localhost:8000',
 });
 
-const SAMPLES = [
-  'A framework using neural networks to optimize data routing in distributed operating systems, specifically designed to mitigate unauthorized access and severe encryption attacks.',
-  'We propose a novel deep reinforcement learning agent for autonomous navigation using convolutional neural networks trained on simulated environments.',
-  'This paper presents a scalable intrusion detection system based on anomaly detection algorithms that monitor network traffic for zero-day exploits and malware signatures.',
-  'We introduce a distributed consensus protocol for fault-tolerant cloud computing clusters that achieves sub-millisecond latency under high contention workloads.',
-  'Our approach combines transformer-based language models with graph neural networks to perform multi-hop reasoning over large-scale knowledge bases.',
-  'A lightweight TCP congestion control algorithm is proposed for 5G mobile edge computing environments with highly variable bandwidth and packet loss.',
-  'We present a differential privacy framework that protects user data during federated learning while maintaining model accuracy across heterogeneous devices.',
-  'This work explores containerized microservice orchestration using Kubernetes with adaptive autoscaling policies for latency-sensitive serverless applications.',
-];
-
 function App() {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [explanations, setExplanations] = useState(null);
-
-  const loadSample = () => {
-    const random = SAMPLES[Math.floor(Math.random() * SAMPLES.length)];
-    setText(random);
-  };
 
   const handleAnalyze = async () => {
     if (!text.trim()) return;
@@ -48,7 +32,7 @@ function App() {
   return (
     <div className="app-container">
       <header>
-        <h1>ArXiv X-Ray</h1>
+        <h1>ArXiv-Research-Dataset-subset-117k</h1>
         <p>Explainable Multi-Label Classifier</p>
       </header>
 
@@ -115,13 +99,6 @@ function App() {
           disabled={loading}
         />
         <div className="actions">
-          <button
-            className="secondary"
-            onClick={loadSample}
-            disabled={loading}
-          >
-            Load Sample
-          </button>
           <button onClick={handleAnalyze} disabled={loading || !text.trim()}>
             {loading ? <Loader2 className="loading-spinner" size={16} /> : <Search size={16} />}
             Analyze
