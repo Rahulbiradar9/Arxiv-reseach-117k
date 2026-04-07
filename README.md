@@ -1,5 +1,5 @@
 # Work in progress
-# This is subset of ArXiv Paper Dataset, still working on main dataset has metadata of 1.7M+ scholarly papers across STEM [dataset](https://www.kaggle.com/datasets/Cornell-University/arxiv)
+## This is subset of ArXiv Paper Dataset, still working on main dataset.It has metadata of 1.7M+ scholarly papers across STEM [dataset](https://www.kaggle.com/datasets/Cornell-University/arxiv)
 
 ## Explainable ArXiv Paper Classifier
 
