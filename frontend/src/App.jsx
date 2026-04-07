@@ -7,10 +7,26 @@ const api = axios.create({
   baseURL: 'http://localhost:8000',
 });
 
+const SAMPLES = [
+  'A framework using neural networks to optimize data routing in distributed operating systems, specifically designed to mitigate unauthorized access and severe encryption attacks.',
+  'We propose a novel deep reinforcement learning agent for autonomous navigation using convolutional neural networks trained on simulated environments.',
+  'This paper presents a scalable intrusion detection system based on anomaly detection algorithms that monitor network traffic for zero-day exploits and malware signatures.',
+  'We introduce a distributed consensus protocol for fault-tolerant cloud computing clusters that achieves sub-millisecond latency under high contention workloads.',
+  'Our approach combines transformer-based language models with graph neural networks to perform multi-hop reasoning over large-scale knowledge bases.',
+  'A lightweight TCP congestion control algorithm is proposed for 5G mobile edge computing environments with highly variable bandwidth and packet loss.',
+  'We present a differential privacy framework that protects user data during federated learning while maintaining model accuracy across heterogeneous devices.',
+  'This work explores containerized microservice orchestration using Kubernetes with adaptive autoscaling policies for latency-sensitive serverless applications.',
+];
+
 function App() {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [explanations, setExplanations] = useState(null);
+
+  const loadSample = () => {
+    const random = SAMPLES[Math.floor(Math.random() * SAMPLES.length)];
+    setText(random);
+  };
 
   const handleAnalyze = async () => {
     if (!text.trim()) return;
@@ -36,6 +52,50 @@ function App() {
         <p>Explainable Multi-Label Classifier</p>
       </header>
 
+      <section className="info-section">
+        <h2>Why did the model choose that label?</h2>
+        <p className="info-desc">
+          This tool doesn't just classify — it shows <em>which words</em> in
+          your text drove each prediction, using three independent explainability
+          methods:
+        </p>
+        <div className="method-cards">
+          <div className="method-card">
+            <span className="method-dot lime"></span>
+            <div>
+              <strong>LIME</strong>
+              <p>
+                Locally Interpretable Model-agnostic Explanations. Perturbs words
+                in the input and observes how predictions change to find which
+                words matter most <em>for this specific input</em>.
+              </p>
+            </div>
+          </div>
+          <div className="method-card">
+            <span className="method-dot shap"></span>
+            <div>
+              <strong>SHAP</strong>
+              <p>
+                SHapley Additive exPlanations. Uses game theory to assign each
+                word a fair contribution score — measuring how much each word
+                pushes the prediction up or down.
+              </p>
+            </div>
+          </div>
+          <div className="method-card">
+            <span className="method-dot attention"></span>
+            <div>
+              <strong>Attention</strong>
+              <p>
+                Extracts the model's internal attention weights from the
+                transformer layers, revealing which words the model
+                "focused on" when making its decision.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="input-section">
         <textarea
           placeholder="Paste a paper abstract here..."
@@ -46,11 +106,7 @@ function App() {
         <div className="actions">
           <button
             className="secondary"
-            onClick={() =>
-              setText(
-                'A framework using neural networks to optimize data routing in distributed operating systems, specifically designed to mitigate unauthorized access and severe encryption attacks.'
-              )
-            }
+            onClick={loadSample}
             disabled={loading}
           >
             Load Sample
