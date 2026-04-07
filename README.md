@@ -1,5 +1,5 @@
 # Still working on it!!
-## ArXiv-Research-Data-subset : Explainable Classifier
+## ArXiv-Research-Dataset-subset : Explainable Classifier
 
 This project is a designed to classify research paper abstracts and visually explain *why* the model made specific predictions using LIME, SHAP, and native BERT Attention mapping.
 
