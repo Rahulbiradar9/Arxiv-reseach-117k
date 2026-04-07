@@ -1,13 +1,22 @@
 import React, { useState, useMemo } from 'react';
 
+const getHighlightColor = (hasLime, hasShap, hasAtt) => {
+  if (hasLime && hasShap && hasAtt) return 'var(--all-bg)';
+  if (hasLime && hasShap) return 'var(--lime-shap-bg)';
+  if (hasLime && hasAtt) return 'var(--lime-att-bg)';
+  if (hasShap && hasAtt) return 'var(--shap-att-bg)';
+  if (hasLime) return 'var(--lime-bg)';
+  if (hasShap) return 'var(--shap-bg)';
+  if (hasAtt) return 'var(--attention-bg)';
+  return 'transparent';
+};
+
 const HighlightedText = ({ text, limeWords, shapWords, attentionWords, showLime, showShap, showAttention }) => {
-  const tokens = useMemo(() => {
-    return text.split(/(\b[a-zA-Z0-9_]+\b)/g);
-  }, [text]);
+  const tokens = useMemo(() => text.split(/(\b[a-zA-Z0-9_]+\b)/g), [text]);
 
   const limeSet = new Set(limeWords.map(w => w.toLowerCase()));
   const shapSet = new Set(shapWords.map(w => w.toLowerCase()));
-  const attSet = new Set(attentionWords.map(w => w.toLowerCase()));
+  const attSet  = new Set(attentionWords.map(w => w.toLowerCase()));
 
   return (
     <div className="text-content">
@@ -19,34 +28,11 @@ const HighlightedText = ({ text, limeWords, shapWords, attentionWords, showLime,
         const lower = token.toLowerCase();
         const hasLime = showLime && limeSet.has(lower);
         const hasShap = showShap && shapSet.has(lower);
-        const hasAtt = showAttention && attSet.has(lower);
-
-        let bg = 'transparent';
-        if (hasLime && hasShap && hasAtt) {
-          bg = 'linear-gradient(45deg, var(--lime-highlight), var(--shap-highlight), var(--attention-highlight))';
-        } else if (hasLime && hasShap) {
-          bg = 'linear-gradient(45deg, var(--lime-highlight), var(--shap-highlight))';
-        } else if (hasLime && hasAtt) {
-          bg = 'linear-gradient(45deg, var(--lime-highlight), var(--attention-highlight))';
-        } else if (hasShap && hasAtt) {
-          bg = 'linear-gradient(45deg, var(--shap-highlight), var(--attention-highlight))';
-        } else if (hasLime) {
-          bg = 'var(--lime-highlight)';
-        } else if (hasShap) {
-          bg = 'var(--shap-highlight)';
-        } else if (hasAtt) {
-          bg = 'var(--attention-highlight)';
-        }
+        const hasAtt  = showAttention && attSet.has(lower);
+        const bg = getHighlightColor(hasLime, hasShap, hasAtt);
 
         return (
-          <span
-            key={i}
-            className="highlight"
-            style={{
-              background: bg,
-              padding: bg !== 'transparent' ? '0 2px' : '0',
-            }}
-          >
+          <span key={i} className="highlight" style={{ background: bg }}>
             {token}
           </span>
         );
@@ -55,21 +41,38 @@ const HighlightedText = ({ text, limeWords, shapWords, attentionWords, showLime,
   );
 };
 
-const ExplainabilityViewer = ({ text, explanation }) => {
+const ExplainabilityViewer = ({ text, explanations }) => {
   const [showLime, setShowLime] = useState(true);
   const [showShap, setShowShap] = useState(true);
   const [showAttention, setShowAttention] = useState(true);
 
-  if (!explanation) return null;
+  if (!explanations || explanations.length === 0) return null;
 
-  const { lime_words, shap_words, attention_words } = explanation.why;
+  // Merge all LIME/SHAP/Attention words across all predicted labels
+  const allLime = [];
+  const allShap = [];
+  const allAttention = [];
+
+  explanations.forEach(exp => {
+    allLime.push(...(exp.why.lime_words || []));
+    allShap.push(...(exp.why.shap_words || []));
+    allAttention.push(...(exp.why.attention_words || []));
+  });
+
+  // Deduplicate
+  const limeWords = [...new Set(allLime)];
+  const shapWords = [...new Set(allShap)];
+  const attentionWords = [...new Set(allAttention)];
 
   return (
     <div className="explain-card">
       <div className="explain-card-header">
-        <div className="label-info">
-          <span className="label-name">{explanation.label}</span>
-          <span className="label-conf">{(explanation.confidence * 100).toFixed(1)}%</span>
+        <div className="predicted-labels">
+          {explanations.map((exp, i) => (
+            <span key={i} className="label-badge">
+              {exp.label} <span className="label-conf">{(exp.confidence * 100).toFixed(1)}%</span>
+            </span>
+          ))}
         </div>
         <div className="toggles">
           <button
@@ -95,9 +98,9 @@ const ExplainabilityViewer = ({ text, explanation }) => {
 
       <HighlightedText
         text={text}
-        limeWords={lime_words}
-        shapWords={shap_words}
-        attentionWords={attention_words}
+        limeWords={limeWords}
+        shapWords={shapWords}
+        attentionWords={attentionWords}
         showLime={showLime}
         showShap={showShap}
         showAttention={showAttention}

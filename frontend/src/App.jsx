@@ -94,6 +94,17 @@ function App() {
             </div>
           </div>
         </div>
+
+        <h3 className="legend-title">Color Key</h3>
+        <div className="legend">
+          <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--lime-bg)' }}></span>LIME</span>
+          <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--shap-bg)' }}></span>SHAP</span>
+          <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--attention-bg)' }}></span>Attention</span>
+          <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--lime-shap-bg)' }}></span>LIME + SHAP</span>
+          <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--lime-att-bg)' }}></span>LIME + Attention</span>
+          <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--shap-att-bg)' }}></span>SHAP + Attention</span>
+          <span className="legend-item"><span className="legend-swatch" style={{ background: 'var(--all-bg)' }}></span>All Three</span>
+        </div>
       </section>
 
       <div className="input-section">
@@ -123,9 +134,9 @@ function App() {
           {explanations.length === 0 && (
             <p className="no-results">No labels exceeded the confidence threshold.</p>
           )}
-          {explanations.map((exp, idx) => (
-            <ExplainabilityViewer key={idx} text={text} explanation={exp} />
-          ))}
+          {explanations.length > 0 && (
+            <ExplainabilityViewer text={text} explanations={explanations} />
+          )}
         </div>
       )}
     </div>
