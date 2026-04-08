@@ -1,7 +1,7 @@
 # Work in progress
 ## This is subset of ArXiv Paper Dataset, still working on main dataset.It has metadata of 1.7M+ scholarly papers across STEM [dataset](https://www.kaggle.com/datasets/Cornell-University/arxiv)
 
-##Train model is available on hugging face [Model](https://huggingface.co/rahul09xd/Arxiv-reseach-subset) 
+## Train model is available on hugging face [Model](https://huggingface.co/rahul09xd/Arxiv-reseach-subset) 
 
 ## Explainable ArXiv Paper Classifier
 
